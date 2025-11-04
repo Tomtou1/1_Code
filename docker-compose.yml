@@ -1,7 +1,21 @@
 services: 
+  mongodb:
+    image: mongodb/mongodb-community-server:latest
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017" #Expose it on the default port
+    volumes:
+      - mongo_data:/data/db
+
   script_import_csv:
     build: ./script_import
     container_name: script_import_csv
     #command: tail -f /dev/null
+    depends_on:
+      - mongodb
+    
+volumes:
+  mongo_data:
+    driver: local
 
-  

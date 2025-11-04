@@ -1,21 +1,33 @@
+import os
+import time
 import pandas as pd
 from pymongo import MongoClient
+from pymongo.errors import ServerSelectionTimeoutError
+
+
+MONGO_HOST = os.environ.get("MONGO_HOST", "mongodb")
+MONGO_PORT = int(os.environ.get("MONGO_PORT", 27017))
+MONGO_DB = os.environ.get("MONGO_DB", "hcare_db")
+
+
+uri = f"mongodb://{MONGO_HOST}:{MONGO_PORT}/{MONGO_DB}"
+
+for _ in range(10):
+    try:
+        client = MongoClient(uri, serverSelectionTimeoutMS=3000)
+        client.admin.command('ping')
+        print("Connexion à Mongo réussie !")
+        break
+    except ServerSelectionTimeoutError:
+        print("Mongo pas encore prêt, retry dans 3s...")
+        time.sleep(3)
 
 #Lecture du CSV
 df = pd.read_csv("data/hcare_dataset_test.csv")
 print(f"CSV file has {df.shape[0]} rows.")
 
-
-MONGO_HOST = "localhost"
-MONGO_PORT = 27017
-MONGO_DB = "hcare_db"
-
-uri = f"mongodb://{MONGO_HOST}:{MONGO_PORT}/{MONGO_DB}"
-client = MongoClient(uri)  # Création d'un nouveau client et connection au serveur
     
 try:
-    client.admin.command("ping")  
-    print("Connection établie - MongoDB!")
     db = client[MONGO_DB]
     collection = db['traitement'] # Création DB traitement
     
