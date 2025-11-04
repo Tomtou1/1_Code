@@ -2,7 +2,7 @@ import pandas as pd
 from pymongo import MongoClient
 
 #Lecture du CSV
-df = pd.read_csv("script_import/data/hcare_dataset_test.csv")
+df = pd.read_csv("data/hcare_dataset_test.csv")
 print(f"CSV file has {df.shape[0]} rows.")
 
 

@@ -1,0 +1,7 @@
+services: 
+  script_import_csv:
+    build: ./script_import
+    container_name: script_import_csv
+    #command: tail -f /dev/null
+
+  
