@@ -11,6 +11,8 @@ services:
     volumes:
       - mongo_data:/data/db
       - ./mongo-init:/docker-entrypoint-initdb.d:ro #Call the file in mongo-init to create roles/users
+    networks:
+      - mongo_net 
 
   script_import_csv:
     build: ./script_import
@@ -20,9 +22,15 @@ services:
     container_name: script_import_csv
     #command: tail -f /dev/null
     depends_on:
-      - mongodb
+      - mongodb    
+    networks:
+      - mongo_net
     
 volumes:
   mongo_data:
     driver: local
+
+networks:
+  mongo_net:
+    driver: bridge
     
