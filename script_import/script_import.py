@@ -8,9 +8,10 @@ from pymongo.errors import ServerSelectionTimeoutError
 MONGO_HOST = os.environ.get("MONGO_HOST", "mongodb")
 MONGO_PORT = int(os.environ.get("MONGO_PORT", 27017))
 MONGO_DB = os.environ.get("MONGO_DB", "hcare_db")
+MONGO_USER = os.environ.get("MONGO_USER")
+MONGO_PASS = os.environ.get("MONGO_PASS")
 
-
-uri = f"mongodb://{MONGO_HOST}:{MONGO_PORT}/{MONGO_DB}"
+uri = f"mongodb://{MONGO_USER}:{MONGO_PASS}@{MONGO_HOST}:{MONGO_PORT}/{MONGO_DB}?authSource=admin"
 
 for _ in range(10):
     try:
