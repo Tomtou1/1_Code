@@ -4,7 +4,7 @@ from pymongo import MongoClient
 import csv_info
 import db_info        
 
-csv_path = 'data/hcare_dataset_test.csv'
+csv_path = 'data/healthcare_dataset.csv'
 collection_name = 'traitement' 
 
 MONGO_HOST = os.environ.get("MONGO_HOST", "mongodb")
@@ -24,7 +24,7 @@ def test_count_lines():
     assert csv_info.get_nbrline_csv(csv_path) == db_info.get_nbrline_db(collection), 'Nbre ligne incorrect: '  + str(csv_info.get_nbrline_csv(csv_path)) + ' dans le csv et ' + str(db_info.get_nbrline_db(collection)) + ' dans la bdd'  
 
 def test_count_columns():
-    assert csv_info.get_nbrcolumns_csv(csv_path) == db_info.get_nbrcolumns_db(collection), 'Nbre colonnes incorrect: ' + str(csv_info.get_nbrcolumns_csv(csv_path)) + ' dans le csv et ' + str(db_info.get_nbrcolumns_db(collection)) + ' dans la bdd'  
+    assert db_info.get_type_columns_db(collection) == {'_id', 'Name', 'Age', 'Gender', 'Blood_Type', 'Insurance_Provider', 'Admission', 'Diagnostic'}, 'Types des champs incorrect!'  
 
 def test_count_doublons():
     assert csv_info.get_doublons_csv(csv_path) == db_info.get_doublons_db(collection), 'Nbre doublons incorrect: ' + str(csv_info.get_doublons_csv(csv_path)) + ' dans le csv et ' + str(db_info.get_doublons_db(collection)) + ' dans la bdd'  

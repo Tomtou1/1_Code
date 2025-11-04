@@ -10,7 +10,7 @@ client = connection_mongoDB()
     
 try:
     #Lecture du csv
-    df = pd.read_csv("data/hcare_dataset_test.csv")
+    df = pd.read_csv("data/healthcare_dataset.csv")
     print(f"CSV file has {df.shape[0]} rows.")
 
     #Creation DB et collection traitement
