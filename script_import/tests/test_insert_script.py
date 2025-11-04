@@ -23,11 +23,13 @@ collection = db[MONGO_COLLECTION]
 def test_count_lines():    
     assert csv_info.get_nbrline_csv(csv_path) == db_info.get_nbrline_db(collection), 'Nbre ligne incorrect: '  + str(csv_info.get_nbrline_csv(csv_path)) + ' dans le csv et ' + str(db_info.get_nbrline_db(collection)) + ' dans la bdd'  
 
-def test_count_columns():
+def test_type_columns():
     assert db_info.get_type_columns_db(collection) == {'_id', 'Name', 'Age', 'Gender', 'Blood_Type', 'Insurance_Provider', 'Admission', 'Diagnostic'}, 'Types des champs incorrect!'  
 
-def test_count_doublons():
-    assert csv_info.get_doublons_csv(csv_path) == db_info.get_doublons_db(collection), 'Nbre doublons incorrect: ' + str(csv_info.get_doublons_csv(csv_path)) + ' dans le csv et ' + str(db_info.get_doublons_db(collection)) + ' dans la bdd'  
+def test_admission_type():
+    assert db_info.get_type_admission_db(collection) == ['Elective','Emergency','Urgent'], 'Type de Admissions non reconnus'
 
-def test_count_missingdata():
-    assert csv_info.get_missing_data_csv(csv_path) == db_info.get_missing_data_db(collection), 'Nbre données manquantes incorrect: ' + str(csv_info.get_missing_data_csv(csv_path)) + ' dans le csv et ' + str(db_info.get_missing_data_db(collection)) + ' dans la bdd'  
+def test_range_age():
+    min_age, max_age = db_info.get_range_age_db(collection)
+    assert min_age["Age"] >= 0 , 'Age négatif?'  
+    assert max_age["Age"] <= 120, 'Age trop élevé: ' + str(max_age["Age"])

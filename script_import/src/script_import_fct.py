@@ -64,9 +64,3 @@ def insertion_df_in_coll(df, collection):
     if documents:
         collection.insert_many(documents)
         print(f"{len(documents)} documents insérés dans la collection 'patients'")
-
-        fields = set()
-        for doc in collection.find():
-            fields.update(doc.keys())
-
-        print(fields)
