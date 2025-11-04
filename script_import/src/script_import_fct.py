@@ -1,4 +1,6 @@
+from datetime import datetime
 import os
+import time
 from pymongo import MongoClient
 from pymongo.errors import ServerSelectionTimeoutError
 
@@ -26,14 +28,39 @@ def connection_mongoDB():
 def insertion_df_in_coll(df, collection):
 
     #Création des headers
-    header = ['Name','Age','Gender']
+    header = ['Name','Age','Gender','Blood Type','Medical Condition','Date of Admission','Doctor','Hospital','Insurance Provider','Billing Amount','Room Number','Admission Type','Discharge Date','Medication','Test Results']
     reader = df.to_dict(orient="records")
 
     #Insertion des informations
-    for each in reader:
-        row = {}
-        for field in header:
-            row[field] = each[field]
-        collection.insert_one(row)
+    documents = []
+    for _, row in df.iterrows():
+        doc = {
+        "Name": row["Name"],
+        "Age": int(row["Age"]),
+        "Gender": row["Gender"],
+        "Blood_Type": row["Blood Type"],
+        "Insurance_Provider": row["Insurance Provider"],
+        "Admission": {
+            "Date_of_Admission": datetime.strptime(row["Date of Admission"], "%Y-%m-%d"),
+            "Discharge_Date": datetime.strptime(row["Discharge Date"], "%Y-%m-%d"),
+            "Admission_Type": row["Admission Type"],
+            "Hospital": row["Hospital"],
+            "Room_Number": row["Room Number"],
+            "Doctor": row["Doctor"],
+            "Billing_Amount": float(row["Billing Amount"]),
+            "Doctor": row["Doctor"],
+        },
+        "Diagnostic": {
+            "Medical_Condition": row["Medical Condition"],
+            "Medication": row["Medication"],
+            "Test_Results": row["Test Results"]
+        },
+        }
+        documents.append(doc)
 
-    print("Insertion finie")
+
+
+# --- Insertion dans MongoDB ---
+    if documents:
+        collection.insert_many(documents)
+        print(f"{len(documents)} documents insérés dans la collection 'patients'")
