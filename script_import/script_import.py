@@ -3,54 +3,24 @@ import time
 import pandas as pd
 from pymongo import MongoClient
 from pymongo.errors import ServerSelectionTimeoutError
+from src.script_import_fct import connection_mongoDB,insertion_df_in_coll
 
-
-MONGO_HOST = os.environ.get("MONGO_HOST", "mongodb")
-MONGO_PORT = int(os.environ.get("MONGO_PORT", 27017))
-MONGO_DB = os.environ.get("MONGO_DB", "hcare_db")
-MONGO_USER = os.environ.get("MONGO_USER")
-MONGO_PASS = os.environ.get("MONGO_PASS")
-
-uri = f"mongodb://{MONGO_USER}:{MONGO_PASS}@{MONGO_HOST}:{MONGO_PORT}/{MONGO_DB}?authSource=admin"
-
-for _ in range(10):
-    try:
-        client = MongoClient(uri, serverSelectionTimeoutMS=3000)
-        client.admin.command('ping')
-        print("Connexion à Mongo réussie !")
-        break
-    except ServerSelectionTimeoutError:
-        print("Mongo pas encore prêt, retry dans 3s...")
-        time.sleep(3)
-
-#Lecture du CSV
-df = pd.read_csv("data/hcare_dataset_test.csv")
-print(f"CSV file has {df.shape[0]} rows.")
-
+#Connection à MongoDB 
+client = connection_mongoDB()
     
 try:
-    db = client[MONGO_DB]
-    collection = db['traitement'] # Création DB traitement
+    #Lecture du csv
+    df = pd.read_csv("data/hcare_dataset_test.csv")
+    print(f"CSV file has {df.shape[0]} rows.")
+
+    #Creation DB et collection traitement
+    db = client['hcare_db']
+    collection = db['traitement'] 
     
     collection.delete_many({}) # pour le dev, à commenter plus tard
-    #Verification que la collection est vide
-    nb_docs = collection.count_documents({})
-    print(f"Avant insertion, la collection contient {nb_docs} documents 📦")
 
-    #Création des headers
-    header = ['Name','Age','Gender']
-    reader = df.to_dict(orient="records")
-
-    #Insertion
-    for each in reader:
-        row = {}
-        for field in header:
-            row[field] = each[field]
-        collection.insert_one(row)
-
-    #Vérification du nbre de docs après insertion
-    nb_docs = collection.count_documents({})
-    print(f"Après insertion, la collection contient {nb_docs} documents 📦")
+    #Appel fonction d'insertion du dataframge dans la collection
+    insertion_df_in_coll(df, collection)
 
 except Exception as e:
     print(e)
