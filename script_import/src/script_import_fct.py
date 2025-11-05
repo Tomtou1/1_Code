@@ -63,4 +63,4 @@ def insertion_df_in_coll(df, collection):
 # --- Insertion dans MongoDB ---
     if documents:
         collection.insert_many(documents)
-        print(f"{len(documents)} documents insérés dans la collection 'patients'")
+        print(f"{len(documents)} documents insérés dans la collection 'traitement'")
