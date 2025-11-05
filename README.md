@@ -43,6 +43,7 @@ Ce csv contient 55500 lignes et 15 colonnes.
 ```
 ## Schéma JSON de la BDD mongoDB
 
+```bash
 {
   "Name": str
   "Age": int
@@ -64,7 +65,7 @@ Ce csv contient 55500 lignes et 15 colonnes.
     "Test_Results": str
   }
 }
-
+```
 ## Logique de migration / Tests - Python
 
 La migration fonctionne comme suit: 

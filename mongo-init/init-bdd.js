@@ -21,8 +21,8 @@ db.createRole({
 db.createRole({
   role: "admin",
   privileges: [
-    { resource: { db: "hcare_db", collection: "" }, actions: ["find", "insert", "update", "remove", "dropCollection", "createCollection","viewUser"] },
-    { resource: { db: "admin", collection: "" }, actions: ["createUser", "grantRole", "revokeRole"] }
+    { resource: { db: "hcare_db", collection: "" }, actions: ["find", "insert", "update", "remove", "dropCollection", "createCollection","createIndex","viewUser"] },
+    { resource: { db: "admin", collection: "" }, actions: ["createUser","dropUser", "grantRole", "revokeRole","viewRole","viewUser"] }
   ],
   roles: []
 });
