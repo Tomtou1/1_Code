@@ -17,7 +17,7 @@ try:
     db = client['hcare_db']
     collection = db['traitement'] 
     
-    #collection.delete_many({}) # pour le dev, à commenter plus tard
+    collection.delete_many({}) # pour le dev, à commenter plus tard
 
     #Appel fonction d'insertion du dataframe dans la collection
     insertion_df_in_coll(df, collection)
