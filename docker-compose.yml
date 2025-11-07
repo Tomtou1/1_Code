@@ -3,8 +3,8 @@ services:
     image: mongodb/mongodb-community-server:latest
     container_name: mongodb
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=rootPassword  
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}  
     restart: always
     ports:
       - "27017:27017" #Expose it on the default port
@@ -17,8 +17,8 @@ services:
   script_import_csv:
     build: ./script_import
     environment:
-      - MONGO_USER=adminUser
-      - MONGO_PASS=adminPassword
+      - MONGO_USER=${MONGO_USER}
+      - MONGO_PASS=${MONGO_PASS}
     container_name: script_import_csv
     #command: tail -f /dev/null
     depends_on:
